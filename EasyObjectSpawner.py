@@ -87,35 +87,35 @@ class EasyObjectSpawner:
                     raichu = "npc/animals/stag_corpse"
                 #Trees
                 elif snorlax.cmd == "snowtree1":
-                    raichu = "autospawn/resources/forest7/Tree-G-Snow-1"
+                    raichu = "autospawn/Tree-G-Snow-1"
                 elif snorlax.cmd == "snowtree2":
-                    raichu = "autospawn/resources/forest7/Tree-F-Snow-1"
+                    raichu = "autospawn/Tree-F-Snow-1"
                 elif snorlax.cmd == "tree1":
-                    raichu = "autospawn/resources/forest6/Tree-G-1"
+                    raichu = "autospawn/Tree-G-1"
                 elif snorlax.cmd == "tree2":
-                    raichu = "autospawn/resources/forest6/Tree-F-1"
+                    raichu = "autospawn/Tree-F-1"
                 elif snorlax.cmd == "tree3":
-                    raichu = "autospawn/resources/forest5/TreeE2-1"
+                    raichu = "autospawn/TreeE2-1"
                 elif snorlax.cmd == "tree4":
-                    raichu = "autospawn/resources/forest3/Tree-G-1"
+                    raichu = "autospawn/Tree-G-1"
                 elif snorlax.cmd == "tree5":
-                    raichu = "autospawn/resources/forest3/Tree-C-1"
+                    raichu = "autospawn/Tree-C-1"
                 elif snorlax.cmd == "foresttree1":
-                    raichu = "autospawn/resources/forest4/forest_4_tree_1"
+                    raichu = "autospawn/forest_4_tree_1"
                 elif snorlax.cmd == "foresttree2":
-                    raichu = "autospawn/resources/forest4/forest_4_tree_4"
+                    raichu = "autospawn/forest_4_tree_4"
                 elif snorlax.cmd == "foresttree3":
-                    raichu = "autospawn/resources/forest4/forest_4_tree_2"
+                    raichu = "autospawn/forest_4_tree_2"
                 elif snorlax.cmd == "foresttree4":
-                    raichu = "autospawn/resources/forest4/forest_4_tree_3"
+                    raichu = "autospawn/forest_4_tree_3"
                 elif snorlax.cmd == "foresttree5":
-                    raichu = "autospawn/resources/forest4/forest_4_tree_5"
+                    raichu = "autospawn/forest_4_tree_5"
                 elif snorlax.cmd == "fieldtree1":
-                    raichu = "autospawn/resources/fields3/Fields-North-1"
+                    raichu = "autospawn/Fields-North-1"
                 elif snorlax.cmd == "fieldtree2":
-                    raichu = "autospawn/resources/fields2/Fields-Mid-1"
+                    raichu = "autospawn/Fields-Mid-1"
                 elif snorlax.cmd == "fieldtree3":
-                    raichu = "autospawn/resources/fields1/Tree-A-1"
+                    raichu = "autospawn/Tree-A-1"
                 if 10 >= count > 0:
                     while num is not count and raichu is not None:
                         World.SpawnMapEntity(raichu, loc.x, loc.y, loc.z)
