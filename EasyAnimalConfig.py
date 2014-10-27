@@ -24,8 +24,10 @@ class EasyAnimalConfig:
         #npc.Location = player.Location
         #npc.baseAnimal = player.Location
         #npc.baseAnimal.transform.position.Set(player.Location)
-        npc.baseEntity.pos = player.Location
-        player.Message("You have angered Mr. " + npc.Name)
+        npc.baseAnimal.pos = player.Location
+        npcname = npc.Name
+        string = re.sub("[(Clone)]+", "", npcname)
+        player.Message("You have angered Mr. " + string)
 
     def On_NPCDeathEvent(self, nde):
         baseplayer = npa.Attacker.ToPlayer()
@@ -49,7 +51,7 @@ class EasyAnimalConfig:
         DataStore.Remove("kills", pl.SteamID)
 
     def markedCallback(self, timer):
-        for pl in Server.Players:
+        for pl in Server.Players.Keys:
             marked = DataStore.Get("marked4death", pl.GameID)
             if marked:
                 n = 3
@@ -57,5 +59,5 @@ class EasyAnimalConfig:
                 for c in xrange(0, n):
                     World.SpawnAnimal("wolf", pl.Location)
                     World.SpawnAnimal("bear", pl.Location)
-                return
-        return
+                    return
+            return

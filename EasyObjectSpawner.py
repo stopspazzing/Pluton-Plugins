@@ -17,7 +17,7 @@ class EasyObjectSpawner:
                    "metalore", "stoneore", "woodpile", "sulfurore", "tree1", "tree2", "tree3", "tree4", "tree5",
                    "foresttree1", "foresttree2", "foresttree3", "foresttree4", "foresttree5", "fieldtree1",
                    "fieldtree2", "fieldtree3", "playercorpse", "bearcorpse", "wolfcorpse", "boarcorpse",
-                   "stagcorpse")
+                   "stagcorpse", "arrow", "shotgunbullet", "riflebullet", "pistolbullet")
         teamrocket = ("bear", "wolf", "boar", "stag")
         loc = snorlax.User.Location
         num = 0
@@ -45,14 +45,7 @@ class EasyObjectSpawner:
                 elif snorlax.cmd == "supplydrop":
                     raichu = "items/supply_drop"
                 elif snorlax.cmd == "player":
-                    player = World.SpawnMapEntity("player/player", loc.x, loc.y, loc.z).ToPlayer()
-                    #player.displayName = "[Pluton Bot]"
-                    #AttachParachute(player)
-                    #player.Inventory.Add(InvItem("Blood"))
-                    #player.Inventory.Add(InvItem("Blood"))
-                    #player.Inventory.Add(InvItem("Blood"))  # blood >:D
-                    #snorlax.User.MessageFrom(player.displayName, "Please don't kill me, master!")
-                    player.EndSleeping()
+                    World.SpawnMapEntity("player/player", loc.x, loc.y, loc.z)
                     return
                 # elif snorlax.cmd == "airdroponme":
                 #    World.AirDropAtPlayer(snorlax.User)
@@ -63,6 +56,16 @@ class EasyObjectSpawner:
                     raichu = "events/cargo_plane"
                 elif snorlax.cmd == "parachute":
                     raichu = "parachute"
+                elif snorlax.cmd == "parachute":
+                    raichu = "parachute"
+                elif snorlax.cmd == "shotgunbullet":
+                    raichu = "projectiles/shotgunbullet"
+                elif snorlax.cmd == "riflebullet":
+                    raichu = "projectiles/riflebullet"
+                elif snorlax.cmd == "pistolbullet":
+                    raichu = "projectiles/pistolbullet"
+                elif snorlax.cmd == "arrow":
+                    raichu = "projectiles/arrow"
                 #Resources wood/stone/metal/sulfur
                 elif snorlax.cmd == "metalore":
                     raichu = "autospawn/resources/ores/resource_ore_metal"
@@ -138,6 +141,5 @@ class EasyObjectSpawner:
                         snorlax.User.Message(msg)
                     return
             elif snorlax.cmd == "test":
-                World.PrintPrefabs()
-                #World.AttachParachute(snorlax.User)
+                World.AttachParachute(snorlax.User)
                 return
