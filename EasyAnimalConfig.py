@@ -19,24 +19,24 @@ class EasyAnimalConfig:
         player.Message("Animals take 50% less dmg, try not to kill too many...")
 
     def On_PlayerDied(self, player):
-        DataStore.Remove("kills", pl.GameID)
+        DataStore.Remove("kills", player.GameID)
 
     def On_NPCAttacked(self, npa):
         baseplayer = npa.Attacker.ToPlayer()
         player = Server.Players[baseplayer.userID]
         npc = npa.Victim
         npc.DamageAmount /= 2
-        #npc.Location = player.Location
-        #npc.baseAnimal = player.Location
-        #npc.baseAnimal.transform.position.Set(player.Location)
-        #npc.baseAnimal.pos = player.Location
-        npcname = re.sub("\(\Clone\)", "", npcname)
-        player.Message("You have angered Mr. " + npcname)
+        npc.Location = player.Location
+        npc.baseAnimal = player.Location
+        npc.baseAnimal.transform.position.Set(player.Location)
+        npc.baseAnimal.pos = player.Location
 
     def On_NPCKilled(self, nde):
         baseplayer = nde.Attacker.ToPlayer()
         player = Server.Players[baseplayer.userID]
         npc = nde.Victim
+        npcname = re.sub("\(\Clone\)", "", npcname)
+        player.Message("You have angered Mr. " + npcname)
         kills = DataStore.Get("kills", player.GameID)
         if kills is None:
             kills = 2
@@ -64,5 +64,5 @@ class EasyAnimalConfig:
                 for c in xrange(0, n):
                     World.SpawnAnimal("wolf", pl.Location)
                     World.SpawnAnimal("bear", pl.Location)
-                    return
-            return
+                return
+        return
