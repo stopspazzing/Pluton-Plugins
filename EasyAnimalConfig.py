@@ -7,8 +7,8 @@ clr.AddReferenceByPartialName("UnityEngine")
 clr.AddReferenceByPartialName("Pluton")
 import UnityEngine
 import Pluton
-from UnityEngine import re
 import re
+from UnityEngine import Random
 
 
 class EasyAnimalConfig:
@@ -18,25 +18,37 @@ class EasyAnimalConfig:
     def On_PlayerConnected(self, player):
         player.Message("Animals take 50% less dmg, try not to kill too many...")
 
+    def On_PlayerDisconnected(self, player):
+        DataStore.Remove("marked4death", player.GameID)
+
     def On_PlayerDied(self, player):
-        DataStore.Remove("kills", player.GameID)
+        DataStore.Remove("marked4death", player.GameID)
+
+    def On_PlayerGathering(self, ge):
+        num = int(Random.Range(0, 10))
+        hp = ge.Health
+        player = ge.Gatherer
+        if num == 5 and hp <= 0:
+            player.Message("Oh noes! You found a hibernating bear!")
+            World.SpawnAnimal("bear", player.Location)
 
     def On_NPCAttacked(self, npa):
-        baseplayer = npa.Attacker.ToPlayer()
-        player = Server.Players[baseplayer.userID]
-        npc = npa.Victim
-        npc.DamageAmount /= 2
-        npc.Location = player.Location
-        npc.baseAnimal = player.Location
-        npc.baseAnimal.transform.position.Set(player.Location)
-        npc.baseAnimal.pos = player.Location
+        #baseplayer = npa.Attacker.ToPlayer()
+        #player = Server.Players[baseplayer.userID]
+        #npc = npa.Victim
+        npa.DamageAmount /= 2
+        #npc.Location = player.Location
+        #npc.baseAnimal = player.Location
+        #npc.baseAnimal.transform.position.Set(player.Location)
+        #npc.baseAnimal.pos = player.Location
 
     def On_NPCKilled(self, nde):
         baseplayer = nde.Attacker.ToPlayer()
         player = Server.Players[baseplayer.userID]
         npc = nde.Victim
-        npcname = re.sub("\(\Clone\)", "", npcname)
-        player.Message("You have angered Mr. " + npcname)
+        npcname = npc.Name
+        npcname = re.sub("\(Clone\)", "", npcname)
+        player.Message("You have angered the " + npcname + " Gods!")
         kills = DataStore.Get("kills", player.GameID)
         if kills is None:
             kills = 2
@@ -48,19 +60,16 @@ class EasyAnimalConfig:
             player.Message("You have been marked for death!")
         DataStore.Add("kills", player.GameID, kills)
         for c in xrange(0, kills):
-            World.SpawnAnimal(npc, npc.Location)
+            World.SpawnAnimal(npcname, npc.Location)
         return
 
-    def On_PlayerDisconnected(self, pl):
-        DataStore.Remove("kills", pl.GameID)
-
-    def markedCallback(self, timer):
+    def markedCallback(self, unused):
         for id, pl in Server.Players.Keys:
             marked = DataStore.Get("marked4death", pl.GameID)
             if marked:
                 n = 3
                 pl.MessageFrom("Mr. Bear", "I hope you learn your lesson!")
-                DataStore.Remove("kills", pl.GameID)
+                DataStore.Add("marked4death", player.GameID, False)
                 for c in xrange(0, n):
                     World.SpawnAnimal("wolf", pl.Location)
                     World.SpawnAnimal("bear", pl.Location)

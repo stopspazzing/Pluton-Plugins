@@ -16,7 +16,7 @@ class EasyAirdrops:
             setini.AddSetting("Settings", "PlayersRequired", "3")  # Default
             setini.AddSetting("Settings", "DropFrequency", "3600")  # In Seconds! 1 hour
             setini.AddSetting("Settings", "DropDuring", "anytime")  # (default) - Can be day/night/anytime
-            setini.AddSetting("Settings", "DropOnPlayer", "False")  # Drop On A Player?
+            setini.AddSetting("Settings", "DropOnPlayer", "True")  # Drop On A Player?
             setini.Save()
         else:
              # If config exists, make sure each setting is set, else add what is missing
@@ -28,7 +28,7 @@ class EasyAirdrops:
             if ini.GetSetting("Settings", "DropDuring") is None:
                 ini.AddSetting("Settings", "DropDuring", "anytime")
             if ini.GetSetting("Settings", "DropOnPlayer") is None:
-                ini.AddSetting("Settings", "DropOnPlayer", "False")
+                ini.AddSetting("Settings", "DropOnPlayer", "True")
             ini.Save()
         ini = self.easyairdropsini()
         try:
@@ -75,8 +75,11 @@ class EasyAirdrops:
         rplayer = bool(ini.GetSetting("Settings", "DropOnPlayer"))
         num = int(Random.Range(0, Server.ActivePlayers.Count - 2))
         rplay = Server.ActivePlayers[num]
+        rplay.Y += 200
         if rplayer:
-            World.AirDropAtPlayer(rplay)
+            #World.AirDropAtPlayer(rplay)  #airdrops seem to be buggy/broken
+            World.SpawnEntity("items/supply_drop", rplay.X, rplay.Y, rplay.Z)
+            Server.Broadcast("Airdrop on player " + rplay)
         else:
             World.AirDrop()
-        Server.Broadcast("Airdrop is on its way!")
+            Server.Broadcast("Airdrop is on its way!")
