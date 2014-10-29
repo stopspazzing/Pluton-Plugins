@@ -45,7 +45,8 @@ class EasyObjectSpawner:
                 elif snorlax.cmd == "supplydrop":
                     raichu = "items/supply_drop"
                 elif snorlax.cmd == "player":
-                    World.SpawnMapEntity("player/player", loc.x, loc.y, loc.z)
+                    player = World.SpawnMapEntity("player/player", loc.x, loc.y, loc.z).ToPlayer()
+                    player.displayName = "[Pluton Bot]"
                     return
                 # elif snorlax.cmd == "airdroponme":
                 #    World.AirDropAtPlayer(snorlax.User)
@@ -65,7 +66,7 @@ class EasyObjectSpawner:
                 elif snorlax.cmd == "pistolbullet":
                     raichu = "projectiles/pistolbullet"
                 elif snorlax.cmd == "arrow":
-                    raichu = "projectiles/arrow"
+                    raichu = "items/arrow"
                 #Resources wood/stone/metal/sulfur
                 elif snorlax.cmd == "metalore":
                     raichu = "autospawn/resources/ores/resource_ore_metal"

@@ -1,6 +1,6 @@
 __author__ = 'CorrosionX'
-__name__ = 'EasyAirdrops'
 __version__ = '1.3'
+__name__ = 'EasyAirdrops'
 import clr
 import sys
 clr.AddReferenceByPartialName("UnityEngine")
@@ -8,6 +8,7 @@ clr.AddReferenceByPartialName("Pluton")
 import UnityEngine
 import Pluton
 from UnityEngine import Random
+
 
 class EasyAirdrops:
     def On_PluginInit(self):
@@ -73,7 +74,7 @@ class EasyAirdrops:
     def dropit(self):
         ini = self.easyairdropsini()
         rplayer = bool(ini.GetSetting("Settings", "DropOnPlayer"))
-        num = int(Random.Range(0, Server.ActivePlayers.Count - 2))
+        num = int(Random.Range(0, Server.ActivePlayers.Count))
         rplay = Server.ActivePlayers[num]
         rplay.Y += 200
         if rplayer:
