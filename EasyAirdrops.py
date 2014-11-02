@@ -76,11 +76,20 @@ class EasyAirdrops:
         rplayer = bool(ini.GetSetting("Settings", "DropOnPlayer"))
         num = int(Random.Range(0, Server.ActivePlayers.Count))
         rplay = Server.ActivePlayers[num]
-        rplay.Y += 200
         if rplayer:
             #World.AirDropAtPlayer(rplay)  #airdrops seem to be buggy/broken
-            World.SpawnEntity("items/supply_drop", rplay.X, rplay.Y, rplay.Z)
-            Server.Broadcast("Airdrop on player " + rplay)
+            World.SpawnMapEntity("items/supply_drop", rplay.X, rplay.Y + 500, rplay.Z)
+            Server.Broadcast("Airdrop on player " + str(rplay.Name))
         else:
-            World.AirDrop()
-            Server.Broadcast("Airdrop is on its way!")
+            ##World.AirDrop() defective, disabled until rust is fixed
+            rplay.X +=
+            World.SpawnMapEntity("items/supply_drop", locx, locy += 500, locz)
+            Server.Broadcast("Airdrop is on its way @ " + str(loc.x) + str(loc.z))
+
+    def locationcheck(self):
+        locy = 0
+        while locy <= 0:
+            loc.x = float(Random.Range(-4000, 4000))
+            loc.z = float(Random.Range(-4000, 4000))
+            loc.y = World.GetGround(loc.x, loc.z)
+            loc = loc.x, loc.y, loc.z
