@@ -1,6 +1,6 @@
 __author__ = 'CorrosionX'
 __version__ = '1.0'
-__name__ = 'EasyAnnouncer
+__name__ = 'EasyAnnouncer'
 import clr
 import sys
 clr.AddReferenceByPartialName("UnityEngine")
