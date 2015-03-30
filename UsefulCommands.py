@@ -14,6 +14,7 @@ class UsefulCommands:
     def On_PluginInit(self):
         DataStore.Flush("markloc")
         DataStore.Flush("markset")
+
     def On_Command(self, cmd):
         suicidelist = ("die", "kill", "slay", "dead")
         locationlist = ("loc", "location")

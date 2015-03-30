@@ -77,13 +77,15 @@ class EasyAirdrops:
         num = int(Random.Range(0, Server.ActivePlayers.Count))
         rplay = Server.ActivePlayers[num]
         if rplayer:
-            #World.AirDropAtPlayer(rplay)  #airdrops seem to be buggy/broken
-            World.SpawnMapEntity("items/supply_drop", rplay.X, rplay.Y + 500, rplay.Z)
-            Server.Broadcast("Airdrop on player " + str(rplay.Name))
+            World.AirDropAtPlayer(rplay)
+            # Use commented out code if you dont want to hear or see the airdrop
+            #World.SpawnMapEntity("items/supply_drop", rplay.X, rplay.Y + 500, rplay.Z)
+            #Server.Broadcast("Airdrop on player " + str(rplay.Name))
         else:
-            ##World.AirDrop() defective, disabled until rust is fixed
-            rplay.X += float(Random.Range(-1000, 1000))
-            rplay.Z += float(Random.Range(-1000, 1000))
-            if -4000 < rplay.X < 4000 and -4000 < rplay.Z < 4000:
-                World.SpawnMapEntity("items/supply_drop", rplay.X, 1000, rplay.Z)
-                Server.Broadcast("Airdrop is on its way @ " + str(loc.X) + str(loc.Z))
+            World.AirDrop()
+            # Use commented out code if you dont want to hear or see the airdrop
+            #rplay.X += float(Random.Range(-1000, 1000))
+            #rplay.Z += float(Random.Range(-1000, 1000))
+            #if -4000 < rplay.X < 4000 and -4000 < rplay.Z < 4000:
+            #    World.SpawnMapEntity("items/supply_drop", rplay.X, 1000, rplay.Z)
+            #    Server.Broadcast("Airdrop is on its way @ " + str(loc.X) + str(loc.Z))

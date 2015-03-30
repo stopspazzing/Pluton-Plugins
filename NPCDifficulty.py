@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '1.0'
+__version__ = '0.7'
 __name__ = 'NPCDifficulty'
 import clr
 import sys
@@ -9,9 +9,21 @@ import UnityEngine
 import Pluton
 import re
 from UnityEngine import Random
+import sys
+path = Util.GetPublicFolder()
+sys.path.append(path + "\\Plugins\\EasyAttachEntities")
+import EasyAttachEntities
 
 
 class NPCDifficulty:
+
+    methodname = "AttachToAnimal"
+    ClassName = EasyAttachEntities.EasyAttachEntities()
+    AttachToAnimals = getattr(ClassName, methodname)
+    methodname = "TimedExplosive"
+    ClassName = EasyAttachEntities.EasyAttachEntities()
+    TimedExplosive = getattr(ClassName, methodname)
+
     def On_PluginInit(self):
         DataStore.Flush("marked4death")
 
@@ -37,6 +49,8 @@ class NPCDifficulty:
 
     def On_NPCKilled(self, nde):
         baseplayer = nde.Attacker.ToPlayer()
+        if baseplayer is None:
+            return
         player = Server.Players[baseplayer.userID]
         npc = nde.Victim
         npcname = npc.Name
@@ -61,7 +75,9 @@ class NPCDifficulty:
                 player.Message("You have been marked for death!")
         DataStore.Add("kills", player.GameID, kills)
         for c in xrange(0, kills):
-            World.SpawnAnimal(npcname, npc.Location)
+            newexplosive = self.TimedExplosive()
+            self.AttachToAnimals(npcname, newexplosive, "head", True)
+            #World.SpawnAnimal(npcname, npc.Location)
 
     def markedCallback(self, timer):
         pldict = timer.Args

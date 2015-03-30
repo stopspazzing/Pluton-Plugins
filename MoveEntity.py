@@ -19,7 +19,9 @@ class MoveEntity:
                 Plugin.CreateParallelTimer("grabbing", 500, mydict).Start()
 
     def grabcheck(self):
-        grab = DataStore.Get("SpawnedEntities", pl.GameID,)
+        grab = DataStore.Get("SpawnedEntities", pl.GameID)
 
     def grabbingCallBack(self, timer):
         user = timer.args
+
+    def lookcheck(self):

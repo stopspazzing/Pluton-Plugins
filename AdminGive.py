@@ -1,10 +1,10 @@
 __author__ = 'Corrosion X'
 __version__ = '1.0'
 __name__ = 'AdminGive'
-#CheckV method based on Spock's method. Upgraded by DreTaX
 import clr
 import sys
-clr.AddReferenceByPartialName("UnityEngine", "Pluton")
+clr.AddReferenceByPartialName("UnityEngine")
+clr.AddReferenceByPartialName("Pluton")
 import UnityEngine
 import Pluton
 import System
@@ -19,8 +19,8 @@ class AdminGive:
             .setUsage("give john hatchet 2")
 
     def giveitem(self, args, player):
-        item = args[1]
-        amount = 1  # for now, will be changed after checked if working
+        itemID = Pluton.InvItem.GetItemID(args[1])
+        amount = int(args[2])
         if player.Admin:
             playerr = self.CheckV(player, args[0])
             if playerr is None:
@@ -30,9 +30,9 @@ class AdminGive:
                 #   amount = int(amount)
                 #except ValueError:
                 #    amount = 1
-                playerr.Inventory.Add(item, amount)
-                playerr.Message("You have been given " + str(amount) + item)
-                player.Message("You have given " + name + str(amount) + item)
+                playerr.Inventory.Add(itemID, amount)
+                playerr.Message("You have been given " + str(amount) + itemID)
+                player.Message("You have given " + name + str(amount) + itemID)
 
     def GetPlayerName(self, namee):
         name = namee.lower()
