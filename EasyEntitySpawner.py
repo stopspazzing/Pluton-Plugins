@@ -42,9 +42,18 @@ class EasyEntitySpawner:
         pikachu.Message("Spawn in Entities and Animals! Type /spawnhelp for more help")
 
     def spawnhere(self, args, player):
+        if len(args) == 0:
+            player.Message("Please see /spawnhelp for proper use!")
+            return
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
         count = quoted[1]
+        if count is None:
+            count = 1
+        try:
+            int(count)
+        except ValueError:
+            count = 1
         loc = player.Location
         if 0 > count > 10:
             player.Message("Valid quantities are: 1 - 10")
@@ -52,16 +61,25 @@ class EasyEntitySpawner:
         self.spawnit(entity, loc, count)
 
     def spawn(self, args, player):
+        if len(args) == 0:
+            player.Message("Please see /spawnhelp for proper use!")
+            return
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
         count = quoted[1]
+        if count is None:
+            count = 1
+        try:
+            int(count)
+        except ValueError:
+            count = 1
         loc = player.Location
         lookpos = player.GetLookPoint()
         dist = Util.GetVectorsDistance(loc, lookpos)
         if 0 > count > 10:
             player.Message("Valid quantities are: 1 - 10")
             return
-        if dist > 50.0:
+        elif dist > 50.0:
             player.Message("Distance is too far from your current location. Please look where you want it to spawn")
             return
         else:
@@ -69,6 +87,13 @@ class EasyEntitySpawner:
             self.spawnit(entity, loc, count)
 
     def spawnhelp(self, args, player):
+        if len(args) == 0:
+            msgtousr = ("-> EasyEntitySpawner by CorrosionX - Special thanks to balu92, xEnt, and DreTaX",
+                        "To spawn entities, use \"/spawnhere entity\" or \"/spawn entity\"",
+                        "For Lists:\"/spawnhelp entities\" or \"/spawnhelp animals\"")
+            for msg in msgtousr:
+                player.Message(msg)
+            return
         quoted = Util.GetQuotedArgs(args)
         if quoted[0] == "animals":
             player.Message("List of Current Animals:")
@@ -79,21 +104,10 @@ class EasyEntitySpawner:
             player.Message("Available Entities: Too long to list. Use F1 -> Entity List - Partial Matches Allowed")
             #  player.Message(prefab)
         else:
-            msgtousr = ("-> EasyEntitySpawner by CorrosionX - Special thanks to balu92, xEnt, and DreTaX",
-                        "To spawn entities, use \"/spawnhere entity\" or \"/spawn entity\"",
-                        "For Lists:\"/spawnhelp entities\" or \"/spawnhelp animals\"")
-            for msg in msgtousr:
-                player.Message(msg)
-            return
+            player.Message("Not A Valid Option")
 
     def spawnit(self, entity, loc, count):
         num = 0
-        if count is None:
-            count = 1
-        try:
-            int(count)
-        except ValueError:
-            count = 1
         if entity not in teamrocket:
             if entity == "player":
                 player = World.SpawnMapEntity("player/player", loc).ToPlayer()
@@ -105,6 +119,7 @@ class EasyEntitySpawner:
                         while num <= count:
                             World.SpawnMapEntity(prefab, loc)
                             num += 1
+                        break
                 return
         else:
             while num <= count:

@@ -30,6 +30,7 @@ class TimePlayed:
 
     def timeonline(self, notused, player):
         playerid = player.GameID
+        getstamp = Plugin.GetTimestamp()
         timeplayed = DataStore.Get("LastConnected", playerid)
         totaltime = DataStore.Get("TotalTimePlayed", playerid)
         timeplayed = datetime.datetime.fromtimestamp(timeplayed).strftime('%Y-%m-%d %H:%M:%S')
@@ -38,3 +39,4 @@ class TimePlayed:
             player.Message("Total Time Played:" + str(totaltime))
         else:
             player.Message("Your time hasn't been recorded yet.")
+        player.Message(getstamp)

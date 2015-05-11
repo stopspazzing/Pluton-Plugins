@@ -46,7 +46,7 @@ class EasyAttachEntities:
 
     def AttachToPlayer(self, Player, whatthing, towhere, Spawn01=False):
         e = Player.basePlayer
-        people = importclassed.server.CreateEntity(whatthing, self.DefaultVector, self.Quat)
+        people = importedclass.server.CreateEntity(whatthing, self.DefaultVector, self.Quat)
         if people:
             people.SetParent(e, towhere)
             people.Spawn(Spawn01)
@@ -59,13 +59,14 @@ class EasyAttachEntities:
             animals.Spawn(Spawn01)
         return animals
 
-    def TimedExplosive(self):
-        explosive = importedclass.server.CreateEntity("weapons/tools/timed.explosive_deployed", self.DefaultVector, self.Quat)
+    def TimedExplosive(self, parent):
+        explosive = importedclass.server.CreateEntity("items/timed.explosive.deployed", self.DefaultVector, self.Quat)
         if explosive:
             explosive.timerAmountMin = 3
             explosive.timerAmountMax = 4
             explosive.explosionRadius = 100
-            explosive.damage = 2000
+            ##explosive.damage = 2000
+            explosive.SetParent(parent, "head")
             explosive.Spawn(True)
         return explosive
 
@@ -78,7 +79,7 @@ class EasyAttachEntities:
         DataStore.Add("attached", player.SteamID, attached)
 
     def attachanimal(self, args, player):
-        quoted = Util.GetQuotedArgsArgs(args)
+        quoted = Util.GetQuotedArgs(args)
         animal = quoted[0]
         whatthing = quoted[1]
         towhere = quoted[2]
@@ -89,6 +90,9 @@ class EasyAttachEntities:
     def detach(self, args, player):
         quoted = Util.GetQuotedArgs(args)
         removewhat = quoted[0]
+        if len(removewhat) == 0:
+            player.Message("Choices are: all, attach, attanimal; Please try again")
+            return
         isattached = DataStore.Get("attached", player.SteamID)
         moreattached = DataStore.Get("attachanimal", player.SteamID)
         if isattached is not None or moreattached is not None:
@@ -106,6 +110,7 @@ class EasyAttachEntities:
             player.Message("You dont have anything attached!")
 
     def test(self, unused, player):
-        attached = self.AttachToPlayer(player, "weapons/melee/boneknife_wm", "head", True)
-        player.Message("Attached entity to your head!")
+        attached = self.AttachToPlayer(player, "weapons/melee/boneknife.weapon", "head", True)
+        self.TimedExplosive(attached)
         DataStore.Add("attached", player.SteamID, attached)
+        player.Message("Attached entity to your head!")
