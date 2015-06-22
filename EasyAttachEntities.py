@@ -65,7 +65,6 @@ class EasyAttachEntities:
             explosive.timerAmountMin = 3
             explosive.timerAmountMax = 4
             explosive.explosionRadius = 100
-            ##explosive.damage = 2000
             explosive.SetParent(parent, "head")
             explosive.Spawn(True)
         return explosive

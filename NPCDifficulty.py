@@ -38,7 +38,7 @@ class NPCDifficulty:
 
     def On_PlayerGathering(self, ge):
         num = int(Random.Range(0, 10))
-        hp = ge.Health
+        hp = int(ge.ItemAmount)
         player = ge.Gatherer
         if hp < 1 and num == 5:
             player.Message("Oh noes! You found a hibernating bear!")
@@ -48,8 +48,8 @@ class NPCDifficulty:
         npa.DamageAmount /= 200
 
     def On_NPCKilled(self, nde):
-        baseplayer = nde.Attacker.ToPlayer()
-        if baseplayer is None:
+        baseplayer = nde.Attacker
+        if baseplayer is None or "NPC":
             return
         player = Server.Players[baseplayer.userID]
         npc = nde.Victim

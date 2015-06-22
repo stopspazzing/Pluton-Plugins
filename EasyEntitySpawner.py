@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '1.0'
+__version__ = '0.9'
 __name__ = 'EasyEntitySpawner'
 # Special thanks to balu92, xEnt, and DreTaX
 import clr
@@ -8,21 +8,21 @@ clr.AddReferenceByPartialName("Pluton", "UnityEngine")
 import UnityEngine
 import Pluton
 from System import String
-teamrocket = ("bear", "wolf", "boar", "stag", "chicken")
-GlobalData["prefabs"] = World.GetPrefabNames()
+teamrocket = ("bear", "wolf", "boar", "stag", "chicken", "horse")
+prefabs = World.GetPrefabNames()
 
 
 class EasyEntitySpawner:
 
-    prefabs = None
+    ##prefabs = None
 
     def On_ServerInit(self):
-        self.prefabs = World.GetPrefabNames()
-        for prefab in self.prefabs:
-            if "chicken" in prefab:
-                UnityEngine.Debug.Log("chicken is: {}".format(prefab))
-            if "wolf" in prefab:
-                UnityEngine.Debug.Log("wolf is: {}".format(prefab))
+        ##self.prefabs = World.GetPrefabNames()
+        for fab in prefabs:
+            if "chicken" in fab:
+                UnityEngine.Debug.Log("chicken is: {}".format(fab))
+            if "wolf" in fab:
+                UnityEngine.Debug.Log("wolf is: {}".format(fab))
 
     def On_PluginInit(self):
         Commands.Register("spawnhere")\
@@ -47,9 +47,10 @@ class EasyEntitySpawner:
             return
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
-        count = quoted[1]
-        if count is None:
+        if len(quoted) <= 1:
             count = 1
+        else:
+            count = quoted[1]
         try:
             int(count)
         except ValueError:
@@ -67,7 +68,7 @@ class EasyEntitySpawner:
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
         count = quoted[1]
-        if count is None:
+        if len(quoted) <= 1:
             count = 1
         try:
             int(count)
@@ -107,22 +108,19 @@ class EasyEntitySpawner:
             player.Message("Not A Valid Option")
 
     def spawnit(self, entity, loc, count):
-        num = 0
+        count = int(count)
+        entity = str(entity)
         if entity not in teamrocket:
             if entity == "player":
                 player = World.SpawnMapEntity("player/player", loc).ToPlayer()
                 player.displayName = "[Pluton Bot]"
                 player.EndSleeping()
             else:
-                for prefab in GlobalData["prefab"]:
-                    if str(entity) in prefab:
-                        while num <= count:
-                            World.SpawnMapEntity(prefab, loc)
-                            num += 1
-                        break
+                for a in prefabs:
+                    if entity in a:
+                        for x in range(0, count):
+                            World.SpawnMapEntity(a, loc)
                 return
         else:
-            while num <= count:
+            for x in range(0, count):
                 World.SpawnAnimal(entity, loc)
-                num += 1
-            return

@@ -19,17 +19,20 @@ class AdminGive:
             .setUsage("give john hatchet 2")
 
     def giveitem(self, args, player):
-        itemID = Pluton.InvItem.GetItemID(args[1])
-        amount = int(args[2])
+        if len(args) == 0:
+            player.Message("How to use /give ex. /give corrosion rock 1")
+            return
+        quoted = Util.GetQuotedArgs(args)
+        itemID = Pluton.InvItem.GetItemID(quoted[1])
+        try:
+            amount = int(quoted[2])
+        except ValueError:
+            amount = 1
         if player.Admin:
-            playerr = self.CheckV(player, args[0])
+            playerr = self.CheckV(player, quoted[0])
             if playerr is None:
                 return
             else:
-                #try:
-                #   amount = int(amount)
-                #except ValueError:
-                #    amount = 1
                 playerr.Inventory.Add(itemID, amount)
                 playerr.Message("You have been given " + str(amount) + itemID)
                 player.Message("You have given " + name + str(amount) + itemID)
