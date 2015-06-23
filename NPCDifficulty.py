@@ -9,7 +9,6 @@ import UnityEngine
 import Pluton
 import re
 from UnityEngine import Random
-import sys
 path = Util.GetPublicFolder()
 sys.path.append(path + "\\Plugins\\EasyAttachEntities")
 import EasyAttachEntities
