@@ -29,3 +29,13 @@ class Permissions:
         ini = self.permissionsini()
         player = cmd.UserID ##use steamID
         ##Check when player executes command if they have permissions to do so else prevent
+
+    def permissionsCallback(self, player, args):
+        if not player.isAdmin:
+            player.Message("Only admins can modify permissions!")
+            return
+        if len(args) == 0:
+            player.Message("Use /permission add/remove username permission")
+            return
+        quoted = Util.GetQuotedArgs(args)
+
