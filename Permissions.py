@@ -25,10 +25,26 @@ class Permissions:
         ##check what perms they have from perm file if not give them "default"
         ##For admins override all, for moderators have defined set amount
 
-    def On_Command(self, cmd, args):
-        ini = self.permissionsini()
-        player = cmd.UserID ##use steamID
-        ##Check when player executes command if they have permissions to do so else prevent
+    def On_CommandPermission(self, cpe):
+        player = cpe.player
+        if player is not player.Admin:
+            playerid = player.SteamID
+            name = player.Name
+            command = cpe.command
+            ini = Plugin.GetIni("Permissions")
+            ini2 = Plugin.GetIni("Settings")
+            debug = bool(ini2.GetSetting("Settings", Debug))
+            ##setting = ini.GetSetting(playerid, "Permissions")
+            setting = ini.GetSetting(PluginName(), command)
+            if setting is None or playerid not in setting:
+                BlockCommand("You Don't Have Permissions For That!")
+                if not debug:
+                    Util.Log(name + " with steamid " + playerid + " attempted to executed command " + command +
+                             " from plugin " + plugin.Name)
+            elif debug:
+                Util.Log(name + " with steamid " + playerid + " executed command " + command + " from plugin " +
+                         plugin.Name)
+            ##Check when player executes command if they have permissions to do so else prevent
 
     def permissionsCallback(self, player, args):
         if not player.isAdmin:

@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.1'
+__version__ = '0.9'
 __name__ = 'VoteDay'
 import clr
 import sys
@@ -18,27 +18,41 @@ class VoteDay:
 
     def votedayCallback(self, player, unused):
         timerstarted = DataStore.Get("voteday", "timerstarted")
+        cooldown = DataStore.Get("voteday", "cooldown")
         if not timerstarted:
             if 17.5 < World.Time < 5.5:
                 Server.Broadcast("A vote for day has been started by " + player + " Use /voteday to cast your vote.")
-                Plugin.CreateTimer("votingfinished", 60).Start()
+                Plugin.CreateTimer("votingtimer", 60).Start()
                 DataStore.Add("voteday", "timerstarted", True)
             else:
-                player.message("You have to wait until night before starting a vote.")
-
-        else:
-            votes = DataStore.Get("voteday", "votes")
-            if player.GameID not in votes:
-                DataStore.Add("voteday", "votes", player.GameID)
+                player.Message("You have to wait until night before starting a vote.")
+        elif not cooldown:
+            if DataStore.ContainsKey("voteday", player.SteamID):
+                player.Message("You already voted!")
             else:
-                player.message("You already voted!")
+                DataStore.Add("voteday", "votes", player.SteamID)
+                player.Message("You're vote was added!")
+        else:
+            player.Message("You must wait until next night to start another vote")
 
-    def votingfinished(self):
+    def votingtimer(self):
+        i = None
+        if DataStore.Get("voteday", "cooldown"):
+            DataStore.Flush("voteday")
+            return
         count = Server.Players.Count
-        votes = len(DataStore.Get("votday", "votes"))
+        for i in DataStore.Get("voteday", "votes"):
+            votes += 1
         if votes / count >= .51:
             Server.Broadcast("Vote for day Passed!")
             World.Time = 6
+            DataStore.Flush("voteday")
         else:
-            Server.Broadcast("Vote for day Failed!")
+            Server.Broadcast("Vote for day failed!")
             ##set time till wait till next night
+            time = World.Time
+            #find difference between current time and morning aka 6
+            waittime = 60 ##temp time
+            Plugin.CreateTimer("votingtimer", waittime).Start()
+            DataStore.Add("voteday", "timerstarted", False)
+            DataStore.Add("voteday", "cooldown", True)

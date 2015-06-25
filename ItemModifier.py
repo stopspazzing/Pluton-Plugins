@@ -1,19 +1,25 @@
 __author__ = 'Corrosion X'
 __version__ = '0.1'
 __name__ = 'Item Modifier'
-
 import clr
-clr.AddReferenceByPartialName("Pluton", "Assembly-CSharp")
-import ItemDefinition, ItemManager, Pluton
+clr.AddReferenceByPartialName("Pluton")
+clr.AddReferenceByPartialName("Assembly-CSharp")
+import ItemDefinition
+import ItemManager
+import Pluton
+itemkey = ItemManager.FindItemDefinition
 
 
 class ItemModifier:
+
+    global itemkey
+
     def On_ServerInit(self):
         if not Plugin.IniExists("Items"):
             Plugin.CreateIni("Items")
             ini = Plugin.GetIni("Items")
-            items = ItemManager.GetItemDefinitions()
-            for item in items:
+            itemdef = ItemManager.GetItemDefinitions()
+            for item in itemdef:
                 ##ini.AddSetting("UID", item.shortname, str(item.uid))
                 ini.AddSetting("StackSizes", item.shortname, str(item.stackable))
                 ini.AddSetting("ConditionMax", item.shortname, str(item.condition.max))
@@ -26,19 +32,19 @@ class ItemModifier:
                 ini.Save()
         ini = Plugin.GetIni("Items")
         for key in ini.EnumSection("StackSizes"):
-            if ItemManager.FindItemDefinition(key) == None:
+            if itemkey(key) is None:
                 Util.Log("Failed to set stack size for: " + key)
                 continue
-            ItemManager.FindItemDefinition(key).stackable = int(ini.GetSetting("StackSizes", key))
+            itemkey.stackable = int(ini.GetSetting("StackSizes", key))
         for key in ini.EnumSection("ConditionMax"):
-            if ItemManager.FindItemDefinition(key) == None:
+            if itemkey(key) is None:
                 Util.Log("Failed to set Max Condition for: " + key)
                 continue
-            ItemManager.FindItemDefinition(key).condition.max = float(ini.GetSetting("ConditionMax", key))
+            itemkey(key).condition.max = float(ini.GetSetting("ConditionMax", key))
         for key in ini.EnumSection("Flags"):
-            if ItemManager.FindItemDefinition(key) == None:
+            if itemkey(key) is None:
                 Util.Log("Failed to set Flags for: " + key)
                 continue
-            ##ItemManager.FindItemDefinition(key).flags = ItemDefinition.Flag.str(ini.GetSetting("Flags", key))
-            if ItemManager.FindItemDefinition(key).flags == "1":
-                ItemManager.FindItemDefinition(key).flags =  ItemDefinition.Flag.NoDropping
+            ##itemkey(key).flags = ItemDefinition.Flag.str(ini.GetSetting("Flags", key))
+            if itemkey(key).flags == "1":
+                itemkey(key).flags =  ItemDefinition.Flag.NoDropping
