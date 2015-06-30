@@ -37,9 +37,9 @@ class NPCDifficulty:
 
     def On_PlayerGathering(self, ge):
         num = int(Random.Range(0, 10))
-        hp = int(ge.ItemAmount)
+        res = ge.Resource
         player = ge.Gatherer
-        if hp < 1 and num == 5:
+        if res is None and num == 5:
             player.Message("Oh noes! You found a hibernating bear!")
             World.SpawnAnimal("bear", player.Location)
 

@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.9'
+__version__ = '0.9.1'
 __name__ = 'EasyEntitySpawner'
 # Special thanks to balu92, xEnt, and DreTaX
 import clr
@@ -47,12 +47,8 @@ class EasyEntitySpawner:
             return
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
-        if len(quoted) <= 1:
-            count = 1
-        else:
-            count = quoted[1]
         try:
-            int(count)
+            count = int(quoted[1])
         except ValueError:
             count = 1
         loc = player.Location
@@ -67,11 +63,8 @@ class EasyEntitySpawner:
             return
         quoted = Util.GetQuotedArgs(args)
         entity = quoted[0]
-        count = quoted[1]
-        if len(quoted) <= 1:
-            count = 1
         try:
-            int(count)
+            count = int(quoted[1])
         except ValueError:
             count = 1
         loc = player.Location
@@ -120,6 +113,8 @@ class EasyEntitySpawner:
                     if entity in a:
                         for x in range(0, count):
                             World.SpawnMapEntity(a, loc)
+                    else:
+                        return
                 return
         else:
             for x in range(0, count):

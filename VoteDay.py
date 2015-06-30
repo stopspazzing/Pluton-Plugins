@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.9'
+__version__ = '0.7'
 __name__ = 'VoteDay'
 import clr
 import sys
@@ -16,7 +16,7 @@ class VoteDay:
             .setDescription("Initiate vote for day")\
             .setUsage("/voteday during night time")
 
-    def votedayCallback(self, player, unused):
+    def voteday(self, unused, player):
         timerstarted = DataStore.Get("voteday", "timerstarted")
         cooldown = DataStore.Get("voteday", "cooldown")
         if not timerstarted:
@@ -36,23 +36,19 @@ class VoteDay:
             player.Message("You must wait until next night to start another vote")
 
     def votingtimer(self):
+        DataStore.Add("voteday", "timerstarted", False)
         i = None
         if DataStore.Get("voteday", "cooldown"):
             DataStore.Flush("voteday")
             return
         count = Server.Players.Count
-        for i in DataStore.Get("voteday", "votes"):
-            votes += 1
+        votes = len(DataStore.Get("voteday", "votes"))
         if votes / count >= .51:
             Server.Broadcast("Vote for day Passed!")
-            World.Time = 6
+            World.Time = 8
             DataStore.Flush("voteday")
         else:
             Server.Broadcast("Vote for day failed!")
-            ##set time till wait till next night
-            time = World.Time
-            #find difference between current time and morning aka 6
-            waittime = 60 ##temp time
+            waittime = 600  #default waiting time before can start new vote
             Plugin.CreateTimer("votingtimer", waittime).Start()
-            DataStore.Add("voteday", "timerstarted", False)
             DataStore.Add("voteday", "cooldown", True)

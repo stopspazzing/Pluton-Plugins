@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.1'
+__version__ = '0.5'
 __name__ = 'Permissions'
 import clr
 import sys
@@ -21,7 +21,7 @@ class Permissions:
             .setUsage("/permission add username permission")
         ##register commands for adding permissions
 
-    def On_PlayerConnected(self, player):
+    ##def On_PlayerConnected(self, player):
         ##check what perms they have from perm file if not give them "default"
         ##For admins override all, for moderators have defined set amount
 
@@ -35,23 +35,30 @@ class Permissions:
             ini2 = Plugin.GetIni("Settings")
             debug = bool(ini2.GetSetting("Settings", Debug))
             ##setting = ini.GetSetting(playerid, "Permissions")
-            setting = ini.GetSetting(PluginName(), command)
+            setting = ini.GetSetting(PluginName, command)
             if setting is None or playerid not in setting:
                 BlockCommand("You Don't Have Permissions For That!")
                 if not debug:
                     Util.Log(name + " with steamid " + playerid + " attempted to executed command " + command +
-                             " from plugin " + plugin.Name)
+                             " from plugin " + PluginName)
             elif debug:
                 Util.Log(name + " with steamid " + playerid + " executed command " + command + " from plugin " +
-                         plugin.Name)
+                         PluginName)
             ##Check when player executes command if they have permissions to do so else prevent
 
-    def permissionsCallback(self, player, args):
-        if not player.isAdmin:
+    def permissions(self, args, player):
+        if not player.Admin:
             player.Message("Only admins can modify permissions!")
             return
-        if len(args) == 0:
+        elif len(args) == 0:
             player.Message("Use /permission add/remove username permission")
             return
         quoted = Util.GetQuotedArgs(args)
+        ini = Plugin.GetIni("Permissions")
+        ini2 = Plugin.GetIni("Settings")
+        if len(quoted) == 3:
+            if (quoted[0] or quoted[1] or quoted[2]) is not None:
+                ##getplayer info: quoted[3]
+                if quoted[0] == "add":
+                    ini.AddSetting(quoted[1], quoted[2], )
 
