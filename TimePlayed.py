@@ -28,7 +28,7 @@ class TimePlayed:
         totaltime += timedsession
         DataStore.Add("TotalTimePlayed", playerid, totaltime)
 
-    def timeonline(self, notused, player):
+    def timeonline(self, unused, player):
         playerid = player.GameID
         ##getstamp = Plugin.GetTimestamp()
         timeplayed = DataStore.Get("LastConnected", playerid)
