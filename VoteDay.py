@@ -20,7 +20,7 @@ class VoteDay:
         timerstarted = DataStore.Get("voteday", "timerstarted")
         cooldown = DataStore.Get("voteday", "cooldown")
         if not timerstarted:
-            if 17.5 < World.Time < 5.5:
+            if 17.5 > World.Time < 5.5:
                 Server.Broadcast("A vote for day has been started by " + player + " Use /voteday to cast your vote.")
                 Plugin.CreateTimer("votingtimer", 60).Start()
                 DataStore.Add("voteday", "timerstarted", True)
@@ -37,15 +37,14 @@ class VoteDay:
 
     def votingtimer(self):
         DataStore.Add("voteday", "timerstarted", False)
-        i = None
         if DataStore.Get("voteday", "cooldown"):
             DataStore.Flush("voteday")
             return
         count = Server.Players.Count
-        votes = len(DataStore.Get("voteday", "votes"))
+        votes = DataStore.Count("voteday", "votes")
         if votes / count >= .51:
             Server.Broadcast("Vote for day Passed!")
-            World.Time = 8
+            World.Time = 7
             DataStore.Flush("voteday")
         else:
             Server.Broadcast("Vote for day failed!")

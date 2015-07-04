@@ -11,19 +11,19 @@ import Pluton
 
 class ReservedSlots:
     def On_PluginInit(self):
-        if not Plugin.IniExists("ReserveSlots"):
-            setini = Plugin.CreateIni("ReserveSlots")
-            setini.AddSetting("ReserveSlots", "slots" "2")
-            ##setini.AddSetting("Reserved", "id", "7843920103240234")
+        if not Plugin.IniExists("ReservedSlots"):
+            setini = Plugin.CreateIni("ReservedSlots")
+            setini.AddSetting("Settings", "ReserveSlots", "2")
+            setini.AddSetting("Reserved", "id", "78439201032402343")
             setini.Save()
-        Command.Register("reserveslots")\
+        Commands.Register("rslots")\
             .setCallback("rslots")\
-            .setDestription("Allows an admin to add and remove players from reserve slots.")\
-            .setUsage("/reserveslots add/remove steamid")
+            .setDescription("Allows an admin to add and remove players from reserve slots.")\
+            .setUsage("/rslots add/remove steamid")
 
     def On_ClientAuth(self, ae):
         cnt = self.domath()
-        ini = Plugin.GetIni("Reserved")
+        ini = Plugin.GetIni("ReserveSlots")
         if cnt or ini.ContainsSetting("id", ae.GameID):
             return
         else:
@@ -32,9 +32,9 @@ class ReservedSlots:
 
     def domath(self):
         cplayers = Server.ActivePlayers.Count
-        ini = Plugin.GetIni("Settings")
-        rslots = ini.GetSetting("reservedslots")
-        maxpl = ConVar.Server.maxplayers
+        ini = Plugin.GetIni("ReservedSlots")
+        rslots = ini.GetSetting("Reserved", "id")
+        maxpl = Server.MaxPlayers
         check = maxpl - rslots
         if check >= cplayers:
             return True
@@ -48,9 +48,9 @@ class ReservedSlots:
             player.Message("Please use /reserveslots add/remove steamid")
         elif args[0] is "remove" or "add":
             if len(args[1]) == 17:
-                ini = Plugin.GetIni("Settings")
+                ini = Plugin.GetIni("ReserveSlots")
                 if args[0] == "add":
-                    ini.AddSetting("id", args[1])
+                    ini.AddSetting("Reserved", "id", args[1])
                 if args[0] == "remove":
                     if ini.ContainsSetting("id", args[1]):
                         ini.DeleteSetting("id", args[1])
