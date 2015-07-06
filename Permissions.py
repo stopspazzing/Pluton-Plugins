@@ -15,10 +15,13 @@ class Permissions:
         if not Plugin.IniExists("Permissions"):
             setini = Plugin.CreateIni("Permissions")
             setini.Save()
+        if not Plugin.IniExists("Settings"):
+            setini = Plugin.CreateIni("Settings")
+            setini.Save()
         Commands.Register("permission")\
             .setCallback("permission")\
-            .setDescription("Allow admin to add and remove permissions")\
-            .setUsage("/permission add username permission")
+            .setDescription("Allow admin to add or remove permissions")\
+            .setUsage("/permission add/remove username permission")
         ##register commands for adding permissions
 
     ##def On_PlayerConnected(self, player):
@@ -60,5 +63,4 @@ class Permissions:
             if (quoted[0] or quoted[1] or quoted[2]) is not None:
                 ##getplayer info: quoted[3]
                 if quoted[0] == "add":
-                    ini.AddSetting(quoted[1], quoted[2], )
-
+                    ini.AddSetting(quoted[1], quoted[2])

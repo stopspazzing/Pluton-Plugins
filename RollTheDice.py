@@ -25,14 +25,14 @@ class RollTheDice:
             player.Message("You have to wait longer before rolling dice again!")
         else:
             self.randomevents(player)
-            dict = Plugin.CreateDict()
+            mydict = Plugin.CreateDict()
             DataStore.Add("cooldown", player.GameID, True)
-            dict["gid"] = player.GameID
+            mydict["gid"] = player.GameID
             Plugin.CreateParallelTimer("cooldown", 60000, dict).Start()
 
     def cooldownCallback(self, timer):
-        dict = timer.Args
-        gid = dict["gid"]
+        mydict = timer.Args
+        gid = mydict["gid"]
         DataStore.Remove("cooldown", gid)
         timer.Kill()
 

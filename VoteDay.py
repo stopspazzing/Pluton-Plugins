@@ -10,6 +10,9 @@ import Pluton
 
 
 class VoteDay:
+
+    votes = 0
+
     def On_PluginInit(self):
         Commands.Register("voteday")\
             .setCallback("voteday")\
@@ -17,9 +20,10 @@ class VoteDay:
             .setUsage("/voteday during night time")
 
     def voteday(self, unused, player):
+        global votes
         timerstarted = DataStore.Get("voteday", "timerstarted")
         cooldown = DataStore.Get("voteday", "cooldown")
-        if not timerstarted:
+        if not timerstarted or None:
             if 17.5 > World.Time < 5.5:
                 Server.Broadcast("A vote for day has been started by " + player + " Use /voteday to cast your vote.")
                 Plugin.CreateTimer("votingtimer", 60).Start()
@@ -30,24 +34,29 @@ class VoteDay:
             if DataStore.ContainsKey("voteday", player.SteamID):
                 player.Message("You already voted!")
             else:
-                DataStore.Add("voteday", "votes", player.SteamID)
+                votes += 1
                 player.Message("You're vote was added!")
         else:
             player.Message("You must wait until next night to start another vote")
 
-    def votingtimer(self):
+    def votingtimer(self, timer):
         DataStore.Add("voteday", "timerstarted", False)
         if DataStore.Get("voteday", "cooldown"):
-            DataStore.Flush("voteday")
             return
+        global votes
         count = Server.Players.Count
-        votes = DataStore.Count("voteday", "votes")
+        int(votes)
         if votes / count >= .51:
             Server.Broadcast("Vote for day Passed!")
             World.Time = 7
-            DataStore.Flush("voteday")
+            self.votingclear(None)
         else:
             Server.Broadcast("Vote for day failed!")
             waittime = 600  #default waiting time before can start new vote
-            Plugin.CreateTimer("votingtimer", waittime).Start()
+            Plugin.CreateTimer("votingclear", waittime).Start()
             DataStore.Add("voteday", "cooldown", True)
+
+    def votingclear(self, timer):
+        global votes
+        votes = 0
+        DataStore.Flush("voteday")

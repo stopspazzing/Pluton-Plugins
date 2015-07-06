@@ -14,7 +14,7 @@ class ReservedSlots:
         if not Plugin.IniExists("ReservedSlots"):
             setini = Plugin.CreateIni("ReservedSlots")
             setini.AddSetting("Settings", "ReserveSlots", "2")
-            setini.AddSetting("Reserved", "id", "78439201032402343")
+            setini.AddSetting("Reserved", "78439201032402343")
             setini.Save()
         Commands.Register("rslots")\
             .setCallback("rslots")\
@@ -24,7 +24,7 @@ class ReservedSlots:
     def On_ClientAuth(self, ae):
         cnt = self.domath()
         ini = Plugin.GetIni("ReserveSlots")
-        if cnt or ini.ContainsSetting("id", ae.GameID):
+        if cnt or ini.ContainsSetting("Reserved", ae.GameID):
             return
         else:
             ae.Reject("You have been kicked due to reserve slots.")
@@ -33,26 +33,27 @@ class ReservedSlots:
     def domath(self):
         cplayers = Server.ActivePlayers.Count
         ini = Plugin.GetIni("ReservedSlots")
-        rslots = ini.GetSetting("Reserved", "id")
+        rslots = ini.Count("Reserved")
         maxpl = Server.MaxPlayers
-        check = maxpl - rslots
+        check = maxpl - int(rslots)
         if check >= cplayers:
             return True
         else:
             return False
 
     def rslots(self, args, player):
+        quoted = Util.GetQuotedArgs(args)
         if not player.Admin:
             return
-        if len(args) <= 2:
+        if len(quoted) < 2:
             player.Message("Please use /reserveslots add/remove steamid")
-        elif args[0] is "remove" or "add":
-            if len(args[1]) == 17:
+        elif quoted[0] is "remove" or "add":
+            if len(quoted[1]) == 17:
                 ini = Plugin.GetIni("ReserveSlots")
-                if args[0] == "add":
-                    ini.AddSetting("Reserved", "id", args[1])
-                if args[0] == "remove":
-                    if ini.ContainsSetting("id", args[1]):
-                        ini.DeleteSetting("id", args[1])
+                if quoted[0] == "add":
+                    ini.AddSetting("Reserved", quoted[1])
+                if quoted[0] == "remove":
+                    if ini.ContainsSetting("Reserved", quoted[1]):
+                        ini.DeleteSetting("Reserved", quoted[1])
             else:
                 player.Message("Please provide a valid steamID")
