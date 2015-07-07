@@ -1,1 +1,19 @@
-__author__ = 'stopspazzing'
+__author__ = 'Corrosion X'
+__version__ = '0.1'
+__name__ = 'InfiniteAmmo'
+import clr
+import sys
+clr.AddReferenceByPartialName("UnityEngine")
+clr.AddReferenceByPartialName("Pluton")
+import UnityEngine
+import Pluton
+
+
+class InfiniteAmmo:
+
+    def On_WeaponFired(self, wf):
+        if wf.Item not wf.Broken:
+            wf.Ammo = wf.origAmmo
+
+    def On_ItemUse(self, iu):
+        if iu.Item == Grenade:

@@ -1,6 +1,6 @@
 __author__ = 'Corrosion X'
-__version__ = '0.8.1'
-__name__ = 'ReservedSlots'
+__version__ = '0.1'
+__name__ = 'RollTheDice'
 import clr
 import sys
 clr.AddReferenceByPartialName("UnityEngine")

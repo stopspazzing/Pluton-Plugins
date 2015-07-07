@@ -33,7 +33,7 @@ class ReservedSlots:
     def domath(self):
         cplayers = Server.ActivePlayers.Count
         ini = Plugin.GetIni("ReservedSlots")
-        rslots = ini.Count("Reserved")
+        rslots = ini.GetSetting("Settings", "ReserveSlots", "2")
         maxpl = Server.MaxPlayers
         check = maxpl - int(rslots)
         if check >= cplayers:
