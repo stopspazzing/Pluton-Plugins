@@ -23,26 +23,27 @@ class ReservedSlots:
 
     def On_ClientAuth(self, ae):
         cnt = self.domath()
-        ini = Plugin.GetIni("ReserveSlots")
-        if cnt or ini.ContainsSetting("Reserved", ae.GameID):
+        ini = Plugin.GetIni("ReservedSlots")
+        if cnt or ini.ContainsSetting("Reserved", str(ae.GameID)):
             return
         else:
             ae.Reject("You have been kicked due to reserve slots.")
-            Debug.Log("Player " + ae.Name + " : " + ae.GameID + " was rejected due to reserve slots.")
+            ##Debug.Log("Player " + ae.Name + " : " + ae.GameID + " was rejected due to reserve slots.")
 
     def domath(self):
         cplayers = Server.ActivePlayers.Count
         ini = Plugin.GetIni("ReservedSlots")
-        rslots = ini.GetSetting("Settings", "ReserveSlots", "2")
+        rslots = ini.GetSetting("Settings", "Reservedslots", "4")
         maxpl = Server.MaxPlayers
         check = maxpl - int(rslots)
-        if check >= cplayers:
+        if check > cplayers:
             return True
         else:
             return False
 
     def rslots(self, args, player):
         quoted = Util.GetQuotedArgs(args)
+        player.Message(str(Server.MaxPlayers))
         if not player.Admin:
             return
         if len(quoted) < 2:

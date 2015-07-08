@@ -15,5 +15,5 @@ class InfiniteAmmo:
         if wf.Item not wf.Broken:
             wf.Ammo = wf.origAmmo
 
-    def On_ItemUse(self, iu):
-        if iu.Item == Grenade:
+    def On_WeaponThrown(self, wt):
+        if wt.Item == Grenade:
