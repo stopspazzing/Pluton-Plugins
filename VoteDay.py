@@ -25,7 +25,7 @@ class VoteDay:
         cooldown = DataStore.Get("voteday", "cooldown")
         if not timerstarted or None:
             if 17.5 > World.Time < 5.5:
-                Server.Broadcast("A vote for day has been started by " + player + " Use /voteday to cast your vote.")
+                Server.Broadcast("A vote for day has been started by " + player.Name + " Use /voteday to cast your vote.")
                 Plugin.CreateTimer("votingtimer", 60).Start()
                 DataStore.Add("voteday", "timerstarted", True)
             else:

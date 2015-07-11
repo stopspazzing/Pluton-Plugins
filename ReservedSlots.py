@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.8.1'
+__version__ = '1.0'
 __name__ = 'ReservedSlots'
 import clr
 import sys
