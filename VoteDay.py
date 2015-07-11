@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '1.0'
+__version__ = '1.0.1'
 __name__ = 'VoteDay'
 import clr
 import sys
@@ -27,7 +27,7 @@ class VoteDay:
             player.Message("You must wait longer to start another vote!")
             return
         if not timerstarted or None:
-            if 17.5 > World.Time < 5.5:
+            if 17.5 < World.Time or World.Time < 5.5:
                 Server.Broadcast("A vote for day has been started by " + player.Name + " Use /voteday to cast your vote.")
                 Plugin.CreateTimer("votingtimer", 60000).Start()
                 DataStore.Add("voteday", "timerstarted", True)
