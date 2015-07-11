@@ -1,5 +1,5 @@
 __author__ = 'Corrosion X'
-__version__ = '0.7'
+__version__ = '1.0'
 __name__ = 'VoteDay'
 import clr
 import sys
@@ -14,49 +14,62 @@ class VoteDay:
     votes = 0
 
     def On_PluginInit(self):
+        self.votingclear(None)
         Commands.Register("voteday")\
             .setCallback("voteday")\
             .setDescription("Initiate vote for day")\
-            .setUsage("/voteday during night time")
+            .setUsage("use during night to start a vote for day")
 
     def voteday(self, unused, player):
-        global votes
         timerstarted = DataStore.Get("voteday", "timerstarted")
         cooldown = DataStore.Get("voteday", "cooldown")
+        if cooldown:
+            player.Message("You must wait longer to start another vote!")
+            return
         if not timerstarted or None:
             if 17.5 > World.Time < 5.5:
                 Server.Broadcast("A vote for day has been started by " + player.Name + " Use /voteday to cast your vote.")
-                Plugin.CreateTimer("votingtimer", 60).Start()
+                Plugin.CreateTimer("votingtimer", 60000).Start()
                 DataStore.Add("voteday", "timerstarted", True)
+                DataStore.Add("voteday", player.SteamID, True)
+                self.votes += 1
             else:
                 player.Message("You have to wait until night before starting a vote.")
-        elif not cooldown:
+        else:
             if DataStore.ContainsKey("voteday", player.SteamID):
                 player.Message("You already voted!")
+                return
             else:
-                votes += 1
+                self.votes += 1
+                DateStore.Add("voteday", player.SteamID, True)
                 player.Message("You're vote was added!")
-        else:
-            player.Message("You must wait until next night to start another vote")
+                result = self.domath()
+                result *= 100
+                Server.Broadcast("Current votes for day:" + str(result) + "%")
 
-    def votingtimer(self, timer):
+    def votingtimerCallback(self, unused):
+        Server.Broadcast("Timer finished")
         DataStore.Add("voteday", "timerstarted", False)
         if DataStore.Get("voteday", "cooldown"):
             return
-        global votes
-        count = Server.Players.Count
-        int(votes)
-        if votes / count >= .51:
+        result = self.domath()
+        if result >= .51:
             Server.Broadcast("Vote for day Passed!")
             World.Time = 7
             self.votingclear(None)
         else:
             Server.Broadcast("Vote for day failed!")
-            waittime = 600  #default waiting time before can start new vote
+            waittime = 60000  # default waiting time before can start new vote
             Plugin.CreateTimer("votingclear", waittime).Start()
             DataStore.Add("voteday", "cooldown", True)
 
-    def votingclear(self, timer):
-        global votes
-        votes = 0
+    def votingclear(self, unused):
+        self.votes = 0
         DataStore.Flush("voteday")
+        Plugin.KillTimers()
+
+    def domath(self):
+        votes = self.votes
+        count = Server.Players.Count
+        result = votes / count
+        return result
