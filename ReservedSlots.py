@@ -10,6 +10,7 @@ import Pluton
 
 
 class ReservedSlots:
+
     def On_PluginInit(self):
         if not Plugin.IniExists("ReservedSlots"):
             setini = Plugin.CreateIni("ReservedSlots")
