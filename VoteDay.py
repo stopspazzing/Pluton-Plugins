@@ -15,7 +15,7 @@ class VoteDay:
     GetConfig = Plugin.GetIni("VoteDay")
 
     def On_PluginInit(self):
-        self.votingclear(None)
+        self.votingclearCallback(None)
         Commands.Register("voteday")\
             .setCallback("voteday")\
             .setDescription("Initiate vote for day")\
@@ -58,7 +58,6 @@ class VoteDay:
                 Server.Broadcast("Current votes for day:" + str(result) + "%")
 
     def votingtimerCallback(self, unused):
-        Server.Broadcast("Timer finished")
         DataStore.Add("voteday", "timerstarted", False)
         if DataStore.Get("voteday", "cooldown"):
             return
@@ -67,14 +66,14 @@ class VoteDay:
         if result >= percent:
             Server.Broadcast("Vote for day Passed!")
             World.Time = 7
-            self.votingclear(None)
+            self.votingclearCallback(None)
         else:
             Server.Broadcast("Vote for day failed!")
             waittime = int(self.GetConfig.GetSetting("Config", "cooldown", "60000"))
             Plugin.CreateTimer("votingclear", waittime).Start()
             DataStore.Add("voteday", "cooldown", True)
 
-    def votingclear(self, unused):
+    def votingclearCallback(self, unused):
         self.votes = 0
         DataStore.Flush("voteday")
         Plugin.KillTimers()

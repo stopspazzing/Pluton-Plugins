@@ -8,21 +8,18 @@ clr.AddReferenceByPartialName("Pluton", "UnityEngine")
 import UnityEngine
 import Pluton
 from System import String
-teamrocket = ("bear", "wolf", "boar", "stag", "chicken", "horse")
-prefabs = World.GetPrefabNames()
 
 
 class EasyEntitySpawner:
 
-    ##prefabs = None
+    teamrocket = ("bear", "wolf", "boar", "stag", "chicken", "horse")
+    networkable = None
 
     def On_ServerInit(self):
-        ##self.prefabs = World.GetPrefabNames()
-        for fab in prefabs:
-            if "chicken" in fab:
-                UnityEngine.Debug.Log("chicken is: {}".format(fab))
-            if "wolf" in fab:
-                UnityEngine.Debug.Log("wolf is: {}".format(fab))
+        mydict = Plugin.CreateDict()
+        networkables = UnityEngine.Resources.FindObjectsOfTypeAll[BaseNetworkable]()
+        for network in networkables:
+            mydict[str(self.networkable)] += network
 
     def On_PluginInit(self):
         Commands.Register("spawnhere")\
@@ -103,13 +100,13 @@ class EasyEntitySpawner:
     def spawnit(self, entity, loc, count):
         count = int(count)
         entity = str(entity)
-        if entity not in teamrocket:
+        if entity not in self.teamrocket:
             if entity == "player":
                 player = World.SpawnMapEntity("player/player", loc).ToPlayer()
                 player.displayName = "[Pluton Bot]"
                 player.EndSleeping()
             else:
-                for a in prefabs:
+                for a in self.networkables:
                     if entity in a:
                         for x in range(0, count):
                             World.SpawnMapEntity(a, loc)

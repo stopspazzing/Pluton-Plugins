@@ -15,7 +15,6 @@ class ReservedSlots:
         if not Plugin.IniExists("ReservedSlots"):
             setini = Plugin.CreateIni("ReservedSlots")
             setini.AddSetting("Settings", "ReserveSlots", "2")
-            setini.AddSetting("Reserved", "78439201032402343")
             setini.Save()
         Commands.Register("rslots")\
             .setCallback("rslots")\
